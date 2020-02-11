@@ -1,4 +1,4 @@
-package com.nsa.app;
+package com.nsa.app.model;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -23,32 +23,56 @@ public class User {
 	@NotEmpty(message = "*Please provide your user name")
 	private String userName;
 	
-	public String getUserName() {
-		return userName;
-	}
-
-	public void setUserName(String userName) {
-		this.userName = userName;
-	}
 	@Column(name = "lastName")
 	private String lastName;
 	
 	@Column(name = "emailId")
 	@Email(message = "*Please provide a valid Email")
-    @NotEmpty(message = "*Please provide an email")
+	@NotEmpty(message = "*Please provide an email")
 	private String email;
 	
+	@Column(name = "password")
+	private String password;
 	
-	public User(int id, String firstName, String lastName, String email) {
+	
+	public String getPassword() {
+		return password;
+	}
+
+
+	public void setPassword(String password) {
+		this.password = password;
+	}
+
+
+	public User(int id, String firstName, String lastName, String email,String userName,String password) {
 		super();
 		this.id = id;
 		this.firstName = firstName;
 		this.lastName = lastName;
 		this.email = email;
+		this.userName=userName;
+		this.password=password;
+		
 	}
+	
+	public User( String firstName, String lastName, String email,String userName,String password) {
+		super();
+		
+		this.firstName = firstName;
+		this.lastName = lastName;
+		this.email = email;
+		this.userName=userName;
+		this.password=password;
+		
+	}
+	
+	
 	
 	public User() {
 	}
+
+
 	public int getId() {
 		return id;
 	}
@@ -72,6 +96,14 @@ public class User {
 	}
 	public void setEmail(String email) {
 		this.email = email;
+	}
+	
+	public String getUserName() {
+		return userName;
+	}
+
+	public void setUserName(String userName) {
+		this.userName = userName;
 	}
 	
 

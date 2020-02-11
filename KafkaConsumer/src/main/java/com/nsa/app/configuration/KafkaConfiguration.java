@@ -1,4 +1,4 @@
-package com.nsa.app;
+package com.nsa.app.configuration;
 
 import java.util.HashMap;
 import java.util.Map;
