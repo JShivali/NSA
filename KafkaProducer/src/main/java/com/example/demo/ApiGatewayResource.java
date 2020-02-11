@@ -24,12 +24,14 @@ public class ApiGatewayResource {
 	KafkaTemplate<String,String> kafkaTemplate;
 	private static final String TOPIC_LOGIN_MESSAGE= "KafkaLoginMessage";
 	private static final String TOPIC_REGISTER_MESSAGE= "KafkaRegisterMessage";
-	private static final String TOPIC_DATARETRIVE_MESSAGE= "KafkaDRMessage";
+	private static final String TOPIC_DATARETRIVE_MESSAGE= "messagehandler-dataretreival";
 	
 	@Autowired
 	KafkaListenerRegisterFeeback registerAckService;
 	@Autowired
 	KafkaListenerLoginFeeback loginAckService;
+	@Autowired
+	KafkaListenerDataRetrieval dataAckService;
 	
 	@CrossOrigin(origins = "http://localhost:3000", maxAge = 3600)
 	@RequestMapping(value="/login", method = RequestMethod.POST, consumes = "application/json")
@@ -49,22 +51,36 @@ public class ApiGatewayResource {
 	}
 	
 	@CrossOrigin(origins = "http://localhost:3000", maxAge = 3600)
-	@GetMapping("/register/{message}")
-	public String register(@PathVariable("message") final String message) {
+	@RequestMapping(value="/register", method = RequestMethod.POST, consumes = "application/json")
+	public String register(@RequestBody String message) throws InterruptedException {
 		kafkaTemplate.send(TOPIC_REGISTER_MESSAGE,message);
-		//return new ApiVersionsResponse(HttpStatus.OK.value(), "User saved successfully.");
-				//KafkaListenerRegisterFeeback.registerAckMsg;
-		return "From successful register";
+		
+		String ack= registerAckService.returnFeedback();
+		System.out.println("ack is"+ack);
+		System.out.println("condition is"+ ack.equalsIgnoreCase("failure"));
+	//	while(ack.equalsIgnoreCase("checking")) {
+		TimeUnit.SECONDS.sleep(10);
+		ack= registerAckService.returnFeedback();
+		
+		return ack;
 	}
 
 	
 	
 	@CrossOrigin(origins = "http://localhost:3000", maxAge = 3600)
-	@GetMapping("/dataretrival")
-	public String dataRetrival(@PathVariable("message") final String message) {
+	@RequestMapping(value="/dataretrieval", method = RequestMethod.POST, consumes = "application/json")
+	public String dataRetrival(@RequestBody String message) throws InterruptedException {
 		kafkaTemplate.send(TOPIC_DATARETRIVE_MESSAGE,message);
+		//Just push the data to message broker for dataa
 		
-		return "Reached API Gateway and pushed to Kafka";
+		String ack= dataAckService.returnFeedback();
+		System.out.println("ack is"+ack);
+		System.out.println("condition is"+ ack.equalsIgnoreCase("failure"));
+	//	while(ack.equalsIgnoreCase("checking")) {
+		TimeUnit.SECONDS.sleep(10);
+		ack= dataAckService.returnFeedback();
+		
+		return ack;
 	}
 	
 	

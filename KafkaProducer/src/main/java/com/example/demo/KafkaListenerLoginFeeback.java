@@ -27,7 +27,8 @@ public class KafkaListenerLoginFeeback {
 			System.out.println("The login feeback message is success? "+message);
 			loginAckMsg="success";
 		}else {
-			System.out.println("The login feeback message is failed? "+message);		
+			System.out.println("The login feeback message is failed? "+message);	
+			loginAckMsg="fail";
 		}
 		
 	}
