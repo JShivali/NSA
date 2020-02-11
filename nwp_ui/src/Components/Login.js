@@ -4,11 +4,11 @@ import { Button, Form, FormGroup, Label, Input } from "reactstrap";
 import { FacebookLoginButton } from "react-social-login-buttons";
 import { BrowserRouter as Router, Route, Link } from "react-router-dom";
 import axios from "axios";
+import App from "../App";
 
 class Login extends React.Component {
   state = {
-    name: "Shivali",
-    password: "123"
+    userName: "Shivali"
   };
 
   // componentDidMount(){
@@ -22,15 +22,22 @@ class Login extends React.Component {
   handleSubmit = event => {
     event.preventDefault();
     const user = {
-      name: this.state.name,
-      password: "shiv"
+      username: "hello",
+      firstName: "shiv",
+      lastName: "Jejurkar",
+      emailId: "null"
     };
 
     const jsonobj = JSON.stringify(user);
+    // const params = new URLSearchParams();
+    // params.append("username", this.state.name);
+    // params.append("password", this.state.password);
+    //axios.post("/foo", params);
 
     axios.post("http://localhost:8081/login", { user }).then(res => {
-      console.log(res);
-      console.log(res);
+      console.log(res.data);
+      if (res.data) {
+      }
     });
   };
 

@@ -6,6 +6,8 @@ import { Link } from "react-router";
 import { BrowserRouter as Router, Route } from "react-router-dom";
 import { FacebookLoginButton } from "react-social-login-buttons";
 import Login from "./Components/Login";
+import Register from "./Components/Register";
+import Dashboard from "./Components/Dashboard";
 
 function App() {
   var cors = require("cors");
