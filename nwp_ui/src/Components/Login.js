@@ -22,10 +22,10 @@ class Login extends React.Component {
   handleSubmit = event => {
     event.preventDefault();
     const user = {
-      username: "hello",
+      username: "shivali",
       firstName: "shiv",
       lastName: "Jejurkar",
-      emailId: "null"
+      emailId: "sj"
     };
 
     const jsonobj = JSON.stringify(user);
@@ -34,11 +34,22 @@ class Login extends React.Component {
     // params.append("password", this.state.password);
     //axios.post("/foo", params);
 
-    axios.post("http://localhost:8081/login", { user }).then(res => {
-      console.log(res.data);
-      if (res.data) {
-      }
-    });
+    axios
+      .post("http://localhost:8081/login", [
+        user.username +
+          " " +
+          user.firstName +
+          " " +
+          user.lastName +
+          " " +
+          user.emailId
+      ])
+      .then(res => {
+        console.log(res.data);
+        if (res.data == "success") {
+          this.props.changeView();
+        }
+      });
   };
 
   render() {

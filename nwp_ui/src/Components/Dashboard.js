@@ -32,44 +32,45 @@ class Dashboard extends React.Component {
 
   render() {
     return (
-      <Form>
-        <Form.Row>
-          <Form.Group as={1} controlId="formGridState">
-            <Form.Label>State</Form.Label>
-            <Form.Control as="select">
-              <option>Choose...</option>
-              <option>...</option>
-            </Form.Control>
-          </Form.Group>
+      <div></div>
+      //   <Form>
+      //     <Form.Row>
+      //       <Form.Group as={1} controlId="formGridState">
+      //         <Form.Label>State</Form.Label>
+      //         <Form.Control as="select">
+      //           <option>Choose...</option>
+      //           <option>...</option>
+      //         </Form.Control>
+      //       </Form.Group>
 
-          <Form.Group as={1} controlId="formGridState">
-            <Form.Label>State</Form.Label>
-            <Form.Control as="select">
-              <option>Choose...</option>
-              <option>...</option>
-            </Form.Control>
-          </Form.Group>
+      //       <Form.Group as={1} controlId="formGridState">
+      //         <Form.Label>State</Form.Label>
+      //         <Form.Control as="select">
+      //           <option>Choose...</option>
+      //           <option>...</option>
+      //         </Form.Control>
+      //       </Form.Group>
 
-          <Form.Group as={1} controlId="formGridState">
-            <Form.Label>State</Form.Label>
-            <Form.Control as="select">
-              <option>Choose...</option>
-              <option>...</option>
-            </Form.Control>
-          </Form.Group>
+      //       <Form.Group as={1} controlId="formGridState">
+      //         <Form.Label>State</Form.Label>
+      //         <Form.Control as="select">
+      //           <option>Choose...</option>
+      //           <option>...</option>
+      //         </Form.Control>
+      //       </Form.Group>
 
-          <Form.Group as={1} controlId="formGridState">
-            <Form.Label>State</Form.Label>
-            <Form.Control as="select">
-              <option>Choose...</option>
-              <option>...</option>
-            </Form.Control>
-          </Form.Group>
-        </Form.Row>
-        <Button variant="primary" type="submit">
-          Submit
-        </Button>
-      </Form>
+      //       <Form.Group as={1} controlId="formGridState">
+      //         <Form.Label>State</Form.Label>
+      //         <Form.Control as="select">
+      //           <option>Choose...</option>
+      //           <option>...</option>
+      //         </Form.Control>
+      //       </Form.Group>
+      //     </Form.Row>
+      //     <Button variant="primary" type="submit">
+      //       Submit
+      //     </Button>
+      //   </Form>
     );
   }
 }
