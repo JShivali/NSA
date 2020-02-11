@@ -7,32 +7,34 @@ import axios from "axios";
 import App from "../App";
 
 class Login extends React.Component {
-  state = {
-    userName: "Shivali"
-  };
+  constructor(props) {
+    super(props);
+    this.state = {
+      userName: "Shivali"
+    };
+    this.handleChange = this.handleChange.bind(this);
+    this.handleSubmit = this.handleSubmit.bind(this);
+  }
 
   // componentDidMount(){
   //   axios.get('').then(res)
   // }
 
   handleChange = event => {
-    this.setState({ name: event.target.value });
+    this.setState({ [event.target.name]: event.target.value });
   };
 
   handleSubmit = event => {
     event.preventDefault();
     const user = {
-      username: "shivali",
-      firstName: "shiv",
-      lastName: "Jejurkar",
-      emailId: "sj"
+      username: this.state.name,
+      firstName: "null",
+      lastName: "null",
+      emailId: "null",
+      password: this.state.password
     };
 
     const jsonobj = JSON.stringify(user);
-    // const params = new URLSearchParams();
-    // params.append("username", this.state.name);
-    // params.append("password", this.state.password);
-    //axios.post("/foo", params);
 
     axios
       .post("http://localhost:8081/login", [
@@ -42,7 +44,9 @@ class Login extends React.Component {
           " " +
           user.lastName +
           " " +
-          user.emailId
+          user.emailId +
+          " " +
+          user.password
       ])
       .then(res => {
         console.log(res.data);
@@ -62,12 +66,19 @@ class Login extends React.Component {
             type="name"
             placeholder="name"
             name="name"
+            value={this.state.name}
             onChange={this.handleChange}
           />
         </FormGroup>
         <FormGroup>
           <Label>Password</Label>
-          <Input type="password" placeholder="password" />
+          <Input
+            type="password"
+            placeholder="password"
+            name="password"
+            value={this.state.password}
+            onChange={this.handleChange}
+          />
         </FormGroup>
 
         {/* <Link to="/Login"> */}
@@ -75,11 +86,11 @@ class Login extends React.Component {
           Login
         </Button>
         {/* </Link> */}
-
+        {/* 
         <div className="text-center pt-3">
           Or continue with your social account
         </div>
-        <FacebookLoginButton className="mt-3 mb-3" />
+        <FacebookLoginButton className="mt-3 mb-3" /> */}
         <Button className="btn-lg btn-dark btn-block">Register</Button>
       </Form>
     );

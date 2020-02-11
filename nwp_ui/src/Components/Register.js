@@ -3,64 +3,114 @@ import MuiThemeProvider from "material-ui/styles/MuiThemeProvider";
 import AppBar from "material-ui/AppBar";
 import RaisedButton from "material-ui/RaisedButton";
 import TextField from "material-ui/TextField";
+import { Button, Form, FormGroup, Label, Input } from "reactstrap";
 import axios from "axios";
+import App from "../App";
+
 class Register extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      first_name: "",
-      last_name: "",
-      email: "",
+      username: "",
+      firstName: "",
+      lastName: "",
+      emailId: "",
       password: ""
     };
   }
+
+  handleChange = event => {
+    this.setState({ [event.target.name]: event.target.value });
+  };
+
+  handleSubmit = event => {
+    event.preventDefault();
+    const user = {
+      username: this.state.username,
+      firstName: this.state.firstName,
+      lastName: this.state.lastName,
+      emailId: this.state.emailId,
+      password: this.state.password
+    };
+
+    axios
+      .post("http://localhost:8081/register", [
+        user.username +
+          " " +
+          user.firstName +
+          " " +
+          user.lastName +
+          " " +
+          user.emailId +
+          " " +
+          user.password
+      ])
+      .then(res => {
+        console.log(res.data);
+        if (res.data == "success") {
+          this.props.changeView();
+        }
+      });
+  };
   render() {
     return (
-      <div>
-        <MuiThemeProvider>
-          <div>
-            <AppBar title="Register" />
-            <TextField
-              hintText="Enter your First Name"
-              floatingLabelText="First Name"
-              onChange={(event, newValue) =>
-                this.setState({ first_name: newValue })
-              }
-            />
-            <br />
-            <TextField
-              hintText="Enter your Last Name"
-              floatingLabelText="Last Name"
-              onChange={(event, newValue) =>
-                this.setState({ last_name: newValue })
-              }
-            />
-            <br />
-            <TextField
-              hintText="Enter your Email"
-              type="email"
-              floatingLabelText="Email"
-              onChange={(event, newValue) => this.setState({ email: newValue })}
-            />
-            <br />
-            <TextField
-              type="password"
-              hintText="Enter your Password"
-              floatingLabelText="Password"
-              onChange={(event, newValue) =>
-                this.setState({ password: newValue })
-              }
-            />
-            <br />
-            <RaisedButton
-              label="Submit"
-              primary={true}
-              style={style}
-              onClick={event => this.handleClick(event)}
-            />
-          </div>
-        </MuiThemeProvider>
-      </div>
+      <Form className="register-form" onSubmit={this.handleSubmit}>
+        <h1>REGISTER PORTAL</h1>
+        <FormGroup>
+          <Label>name</Label>
+          <Input
+            type="name"
+            placeholder="name"
+            name="username"
+            value={this.state.username}
+            onChange={this.handleChange}
+          />
+        </FormGroup>
+        <FormGroup>
+          <Label>Password</Label>
+          <Input
+            type="password"
+            placeholder="password"
+            name="password"
+            value={this.state.password}
+            onChange={this.handleChange}
+          />
+        </FormGroup>
+        <FormGroup>
+          <Label>emailId</Label>
+          <Input
+            type="email"
+            placeholder="email"
+            name="emailId"
+            value={this.state.emailId}
+            onChange={this.handleChange}
+          />
+        </FormGroup>
+        <FormGroup>
+          <Label>First name</Label>
+          <Input
+            type="name"
+            placeholder="first name"
+            name="firstName"
+            value={this.state.firstName}
+            onChange={this.handleChange}
+          />
+        </FormGroup>
+        <FormGroup>
+          <Label>Last name</Label>
+          <Input
+            type="name"
+            placeholder="last name"
+            name="lastName"
+            value={this.state.lastName}
+            onChange={this.handleChange}
+          />
+        </FormGroup>
+
+        <Button className="btn-lg btn-dark btn-block" type="submit">
+          Register
+        </Button>
+      </Form>
     );
   }
 }
