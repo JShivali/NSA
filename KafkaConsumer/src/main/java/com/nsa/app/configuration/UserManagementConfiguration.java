@@ -7,6 +7,7 @@ import org.apache.kafka.clients.consumer.ConsumerConfig;
 import org.apache.kafka.clients.producer.ProducerConfig;
 import org.apache.kafka.common.serialization.StringDeserializer;
 import org.apache.kafka.common.serialization.StringSerializer;
+import org.codehaus.jettison.json.JSONObject;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.kafka.annotation.EnableKafka;
@@ -19,12 +20,19 @@ import org.springframework.kafka.core.ProducerFactory;
 import org.springframework.kafka.support.serializer.JsonDeserializer;
 import org.springframework.kafka.support.serializer.JsonSerializer;
 
+import com.fasterxml.jackson.databind.util.JSONPObject;
+import com.google.gson.JsonObject;
 import com.nsa.app.UserInput;
+import com.nsa.app.model.SessionLog;
 import com.nsa.app.model.User;
 
 @EnableKafka
 @Configuration
 public class UserManagementConfiguration {
+	
+	private static final String TOPIC_LOGIN_ACK= "LoginSuccessMessage";
+	private static final String TOPIC_REGISTER_ACK= "RegisterSuccessMessage";
+	private static final String TOPIC_SESSION_LOG="SessionLog";
 
 	@Bean
 	public ConsumerFactory<String, String> consumerFactory(){
@@ -89,10 +97,27 @@ public class UserManagementConfiguration {
 	}
 	
 	
+	@Bean 
+	public  ProducerFactory producerFactorySessionLog(){
+		
+		Map<String,Object> config= new HashMap<>();
+		config.put(ProducerConfig.BOOTSTRAP_SERVERS_CONFIG,"127.0.0.1:9092" );
+		config.put(ProducerConfig.KEY_SERIALIZER_CLASS_CONFIG,StringSerializer.class );
+		config.put(ProducerConfig.VALUE_SERIALIZER_CLASS_CONFIG,JsonSerializer.class );
+				
+		return new DefaultKafkaProducerFactory<>(config);
+				
+	}
+	
 	@Bean
 	public KafkaTemplate<String,String> kafkaTemplate(){
 		return new KafkaTemplate<String,String>(producerFactory());
 	}
 	
+	
+	@Bean
+	public KafkaTemplate<String,SessionLog> kafkaTemplateSessionLog(){
+		return new KafkaTemplate<String,SessionLog>(producerFactorySessionLog());
+	}
 	
 }

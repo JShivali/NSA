@@ -2,13 +2,17 @@ package com.nsa.app;
 
 import java.util.List;
 
+import org.codehaus.jettison.json.JSONException;
+import org.codehaus.jettison.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.kafka.annotation.KafkaListener;
 import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.stereotype.Service;
 
+import com.fasterxml.jackson.databind.util.JSONPObject;
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
+import com.google.gson.JsonParser;
 import com.nsa.app.UserInput;
 import com.nsa.app.model.*;
 
@@ -24,16 +28,18 @@ public class KafkaConsumer {
 	KafkaTemplate<String,String> kafkaTemplate;
 	private static final String TOPIC_LOGIN_ACK= "LoginSuccessMessage";
 	private static final String TOPIC_REGISTER_ACK= "RegisterSuccessMessage";
+	private static final String TOPIC_SESSION_LOG="SessionLog";
+	
+	@Autowired
+	KafkaTemplate<String,SessionLog> kafkaTemplateSessionLog;
 
 	@KafkaListener(topics="KafkaLoginMessage", groupId ="group_id", containerFactory="userKafkaListenerFactory")
-	public void consumeLogin(UserInput message) {		
+	public void consumeLogin(UserInput message) throws JSONException {		
 	
 		System.out.println("message received is in login"+message);
 		
 		String username=message.getUserName();
 		String password=message.getPassword();
-		
-		System.out.println("Username is +++++"+username);
 	
 		  User user= userRepository.findByuserName(username);
 		  
@@ -44,6 +50,17 @@ public class KafkaConsumer {
 				if((user.getPassword().equals(message.getPassword())) && (user.getUserName().equals(message.getUserName()))) {
 					System.out.println("SUCESSS>>>>>>>>>>>>>>>>>>>>>");
 					kafkaTemplate.send(TOPIC_LOGIN_ACK,"LOGIN_SUCCESS");
+					
+					// send message to session-mgmt userid+ login_success
+					 
+					SessionLog sessionLog = new SessionLog();
+					sessionLog.setStatus("LOGIN_SUCCESS");
+					sessionLog.setUserName(username);
+					
+//					JsonObject sessionlogObj = new JsonObject();
+//					sesessionlogObj.put("status","LOGIN_SUCCESS");
+//		
+					kafkaTemplateSessionLog.send(TOPIC_SESSION_LOG,sessionLog);
 				}
 				else {
 					System.out.println("Faileeeeeeeeeeeeeeeeee");
