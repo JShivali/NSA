@@ -11,24 +11,24 @@ import org.springframework.stereotype.Service;
 
 
 @Service
-public class KafkaListenerLoginFeeback {
+public class KafkaListenerLoginFeedback {
 	
-	public static String loginAckMsg="checking";
+	public static String loginAckMsg=KafkaProducerConfiguration.LOGIN_FAIL;
 	
 	@KafkaListener(topics="LoginSuccessMessage", groupId ="group_id")
 	public void consume(String message) {
 		
-		String resp= new String("success");
-		message = message.substring(1,message.length()-1);
+		String resp= "LOGIN_SUCCESS";
+		
 		
 		System.out.println("Come inside the Kafka Login feeback "+message);
 		System.out.println("message is "+ message + " resp is "+resp);
 		if(message.equals(resp)) {
 			System.out.println("The login feeback message is success? "+message);
-			loginAckMsg="success";
+			loginAckMsg=KafkaProducerConfiguration.LOGIN_SUCCESS;
 		}else {
 			System.out.println("The login feeback message is failed? "+message);	
-			loginAckMsg="fail";
+			loginAckMsg=KafkaProducerConfiguration.LOGIN_FAIL;
 		}
 		
 	}

@@ -16,11 +16,15 @@ import org.springframework.kafka.core.DefaultKafkaConsumerFactory;
 import org.springframework.kafka.core.DefaultKafkaProducerFactory;
 import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.kafka.core.ProducerFactory;
+import org.springframework.kafka.support.serializer.JsonDeserializer;
 import org.springframework.kafka.support.serializer.JsonSerializer;
+
+import com.nsa.app.UserInput;
+import com.nsa.app.model.User;
 
 @EnableKafka
 @Configuration
-public class KafkaConfiguration {
+public class UserManagementConfiguration {
 
 	@Bean
 	public ConsumerFactory<String, String> consumerFactory(){
@@ -32,6 +36,31 @@ public class KafkaConfiguration {
 		config.put(ConsumerConfig.VALUE_DESERIALIZER_CLASS_CONFIG, StringDeserializer.class);
 		
 		return new DefaultKafkaConsumerFactory<>(config);
+	}
+	
+	
+	@Bean
+	public DefaultKafkaConsumerFactory<String, UserInput> userconsumerFactory(){
+		Map<String,Object> config =new HashMap<>();
+		
+		config.put(ConsumerConfig.BOOTSTRAP_SERVERS_CONFIG, "127.0.0.1:9092");
+		config.put(ConsumerConfig.GROUP_ID_CONFIG, "group_id");
+		config.put(ConsumerConfig.KEY_DESERIALIZER_CLASS_CONFIG, StringDeserializer.class);
+		config.put(ConsumerConfig.VALUE_DESERIALIZER_CLASS_CONFIG, JsonDeserializer.class);
+		config.put(JsonDeserializer.TRUSTED_PACKAGES, "com.example.demo.User");
+		
+		return new DefaultKafkaConsumerFactory<String,UserInput>(config, new StringDeserializer(), new JsonDeserializer<>(UserInput.class,false));
+	}
+	
+	
+	@Bean
+	public ConcurrentKafkaListenerContainerFactory<String,UserInput> userKafkaListenerFactory() {
+		
+		ConcurrentKafkaListenerContainerFactory<String,UserInput> factory= new ConcurrentKafkaListenerContainerFactory<>();
+		factory.setConsumerFactory(userconsumerFactory());
+		
+		return factory;
+		
 	}
 	
 	
@@ -53,7 +82,7 @@ public class KafkaConfiguration {
 		Map<String,Object> config= new HashMap<>();
 		config.put(ProducerConfig.BOOTSTRAP_SERVERS_CONFIG,"127.0.0.1:9092" );
 		config.put(ProducerConfig.KEY_SERIALIZER_CLASS_CONFIG,StringSerializer.class );
-		config.put(ProducerConfig.VALUE_SERIALIZER_CLASS_CONFIG,JsonSerializer.class );
+		config.put(ProducerConfig.VALUE_SERIALIZER_CLASS_CONFIG,StringSerializer.class );
 				
 		return new DefaultKafkaProducerFactory<>(config);
 				

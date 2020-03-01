@@ -1,14 +1,12 @@
-package com.example.demo;
+package com.nsa.app;
+
 
 import javax.validation.constraints.Email;
+
 import javax.validation.constraints.NotEmpty;
 
+public class UserInput {
 
-public class User {
-	
-	
-	private int id;
-	
 
 	private String firstName;
 	
@@ -22,26 +20,47 @@ public class User {
 	private String email;
 	
 	
-	public User(int id, String firstName, String lastName, String email,String userName) {
+	private String password;
+	
+	
+	public String getPassword() {
+		return password;
+	}
+
+
+	public void setPassword(String password) {
+		this.password = password;
+	}
+
+	/*
+	 * public User(int id, String firstName, String lastName, String email,String
+	 * userName,String password) { super(); // this.id = id; this.firstName =
+	 * firstName; this.lastName = lastName; this.email = email;
+	 * this.userName=userName; this.password=password;
+	 * 
+	 * }
+	 */
+	
+	public UserInput( String firstName, String lastName, String email,String userName,String password) {
 		super();
-		this.id = id;
+		
 		this.firstName = firstName;
 		this.lastName = lastName;
 		this.email = email;
 		this.userName=userName;
+		this.password=password;
+		
 	}
 	
 	
-	public User() {
+	
+	public UserInput() {
 	}
 
 
-	public int getId() {
-		return id;
-	}
-	public void setId(int id) {
-		this.id = id;
-	}
+	/*
+	 * public int getId() { return id; } public void setId(int id) { this.id = id; }
+	 */
 	public String getFirstName() {
 		return firstName;
 	}
